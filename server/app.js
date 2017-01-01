@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const expressWinston = require('express-winston');
 const path = require('path');
 const glob = require('glob');
+const fs = require('fs');
 
 const logger = require('./app/lib/logger');
 const config = require('./config/config');
@@ -14,12 +15,33 @@ app.use(expressWinston.logger({
 }));
 
 app.use(bodyParser.json());
+
+function tryStaticGzipped(req, res, next) {
+
+    const diskPath = path.join(config.root, 'public', req.url) + '.gz';
+
+    fs.exists(diskPath, exists => {
+
+        if (exists) {
+            req.url = req.url + '.gz';
+            res.set('Content-Encoding', 'gzip');
+        }
+
+        next();
+    });
+
+}
+
+app.get('*.bundle.js', tryStaticGzipped);
+//app.get('*.bundle.css', tryStaticGzipped);
+
 app.use(express.static(path.join(config.root, 'public')));
 
 const controllers = glob.sync(path.join(config.root, 'app', 'routes', '*.js'));
 controllers.forEach(function (controller) {
     require(controller)(app);
 });
+
 
 const indexFile = path.join(config.root, 'public', 'index.html');
 app.use(function (req, res) {

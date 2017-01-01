@@ -1,0 +1,14 @@
+<table *ngIf="data" class="table table-striped">
+  <tr>
+    <td>Host</td>
+    <td>{{data.hostname}}</td>
+  </tr>
+  <tr>
+    <td>Free Memory</td>
+    <td>{{data.mem | mb }}</td>
+  </tr>
+  <tr>
+    <td>Temperature</td>
+    <td *ngIf="data.temp">{{data.temp | fahrenheit }} &deg; F</td>
+    <td *ngIf="!data.tmp">N/A</td>
+  </tr>

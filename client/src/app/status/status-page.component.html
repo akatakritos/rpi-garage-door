@@ -1,11 +1,14 @@
-<table *ngIf="data" class="table table-striped">
+<table *ngIf="data" class="table ">
   <tr>
     <td>Host</td>
     <td>{{data.hostname}}</td>
   </tr>
   <tr>
     <td>Free Memory</td>
-    <td>{{data.mem | mb }}</td>
+    <td>
+      <progress-bar [max]="data.totalMem" [current]="data.totalMem - data.mem" [label]="generateLabel(data)"></progress-bar>
+      {{data.totalMem - data.mem | mb }} of {{data.totalMem | mb}}
+    </td>
   </tr>
   <tr>
     <td>Temperature</td>

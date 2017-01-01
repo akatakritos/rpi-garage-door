@@ -8,6 +8,7 @@ export interface StatusData {
     hostname: string;
     loadavg: number[];
     temp: number;
+    totalMem: number;
 }
 
 @Injectable()

@@ -16,7 +16,8 @@ router.get('/status', function(req, res) {
                 mem: os.freemem(),
                 hostname: os.hostname(),
                 loadavg: os.loadavg(),
-                temp: celsius
+                temp: celsius,
+                totalMem: os.totalmem()
             };
 
             res.json(result);

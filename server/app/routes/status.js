@@ -11,12 +11,12 @@ module.exports = function(app) {
 router.get('/status', function(req, res) {
 
     rpi.temperature()
-        .then(celcius => {
+        .then(celsius => {
             const result = {
                 mem: os.freemem(),
                 hostname: os.hostname(),
                 loadavg: os.loadavg(),
-                temp: celcius
+                temp: celsius
             };
 
             res.json(result);

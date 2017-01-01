@@ -15,10 +15,9 @@ module.exports.temperature = function() {
         fs.readFile('/sys/class/thermal/thermal_zone0/temp', (err, data) => {
             if (err) return reject(err);
 
-            const milligrades = parseInt(data);
             logger.debug(`read raw "${data}"`);
-            logger.debug(milligrades);
-            logger.debug(milligrades/1000);
+
+            const milligrades = parseInt(data.trim());
             resolve(milligrades / 1000);
         });
 

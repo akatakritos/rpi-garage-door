@@ -21,10 +21,9 @@ controllers.forEach(function (controller) {
     require(controller)(app);
 });
 
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+const indexFile = path.join(config.root, 'public', 'index.html');
+app.use(function (req, res) {
+    res.status(200).sendFile(indexFile);
 });
 
 if (config.env === 'development') {

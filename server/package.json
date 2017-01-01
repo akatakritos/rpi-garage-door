@@ -1,0 +1,28 @@
+{
+  "name": "garage-door",
+  "version": "0.0.1",
+  "description": "Garage Door remote control with Raspberry Pi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matt Burke",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.12.2",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-winston": "^2.1.2",
+    "moment": "^2.17.1",
+    "moment-timezone": "^0.5.11",
+    "morgan": "^1.7.0",
+    "winston": "^2.3.0"
+  },
+  "optionalDependencies": {
+    "rpio": "^0.9.14"
+  }
+}

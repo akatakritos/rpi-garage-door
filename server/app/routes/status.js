@@ -30,7 +30,7 @@ function ips() {
         });
     });
 
-    return results;s
+    return results;
 }
 
 router.get('/status', function (req, res) {

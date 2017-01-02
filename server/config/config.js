@@ -9,6 +9,12 @@ const config = {
         port: 3000,
         root,
         pi: os.platform() === 'linux'
+    },
+    test: {
+        env: 'test',
+        port: 3000,
+        root,
+        pi: os.platform() === 'linux'
     }
 };
 

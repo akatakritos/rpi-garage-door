@@ -4,7 +4,7 @@
   "description": "Garage Door remote control with Raspberry Pi",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive test --reporter spec --require ./test/init.js",
     "start": "node app.js",
     "watch": "nodemon app.js"
   },
@@ -14,7 +14,8 @@
     "chai": "^3.5.0",
     "eslint": "^3.12.2",
     "mocha": "^3.2.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "testdouble": "^1.10.2"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

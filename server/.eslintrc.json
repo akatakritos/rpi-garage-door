@@ -3,6 +3,12 @@
         "es6": true,
         "node": true
     },
+    "globals": {
+        "describe": true,
+        "it": true,
+        "beforeEach": true,
+        "afterEach": true
+    },
     "extends": "eslint:recommended",
     "rules": {
         "indent": [

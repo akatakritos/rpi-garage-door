@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ControlPageComponent } from './control-page.component';
 import { DoorControlComponent } from './door-control.component';
 import { DoorService, Door } from './door.service';
+import { SharedModule } from '../shared/shared.module';
 
 export {
     ControlPageComponent,
@@ -20,6 +21,7 @@ const routes: Routes = [
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
+        SharedModule
     ],
     declarations: [ControlPageComponent, DoorControlComponent],
     exports: [ RouterModule ],

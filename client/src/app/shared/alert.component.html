@@ -1,0 +1,5 @@
+<div class="alert alert-info" [ngClass]="className" role="alert" [@fadeOut]>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()"><span aria-hidden="true">&times;</span></button>
+    <strong *ngIf="title">{{ title }}</strong>
+    {{message}}
+</div>

@@ -6,9 +6,7 @@
 
     <div class="panel-body">
         <div class="alert-container">
-            <div class="alert alert-info" role="alert" *ngIf="message">
-                {{ message }}
-            </div>
+            <alert *ngIf="message" [message]="message" [type]="'info'" (dismissed)="onAlertDismissed()"></alert>
         </div>
         <p>Status: <strong>{{ door.open ? 'Open' : 'Closed' }}</strong></p>
         <div>

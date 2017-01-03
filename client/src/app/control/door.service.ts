@@ -43,7 +43,7 @@ export class DoorService {
 
     toggle(door: Door) {
         return this.http.post(`/api/doors/${door.id}/toggle`, '')
-            .map(res => res.json());
+            .map(response => true);
     }
 
 

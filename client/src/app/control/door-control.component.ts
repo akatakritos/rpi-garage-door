@@ -36,9 +36,13 @@ export class DoorControlComponent implements OnInit {
         }
 
         this.handle = setTimeout(() => {
-            this.message = null;
-            this.handle = null;
+            this.onAlertDismissed();
         }, 2000);
+    }
+
+    onAlertDismissed() {
+        this.message = null;
+        this.handle = null;
     }
 
 }

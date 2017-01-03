@@ -28,7 +28,7 @@ describe('GPIO Controller', () => {
     let rpio;
     beforeEach(() => rpio = td.object(FakeRpio));
 
-    describe('toggle', () => {
+    describe('#toggle', () => {
 
         it('turns high, sleeps, then turns low', () => {
 
@@ -38,6 +38,18 @@ describe('GPIO Controller', () => {
                 td.verify(rpio.write(1, 1));
                 td.verify(rpio.msleep(20));
                 td.verify(rpio.write(1, 0));
+            });
+        });
+    });
+
+    describe('#isOpen', () => {
+        it ('reads from the sensor and converts to bool', () => {
+            gateway.init(doors, rpio);
+
+            td.when(rpio.read(2)).thenReturn(1);
+
+            return gateway.isOpen(doors[0]).then(open => {
+                expect(open).to.be.true;
             });
         });
     });

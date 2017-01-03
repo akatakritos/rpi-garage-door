@@ -3,8 +3,13 @@ const logger = require('./logger');
 
 let rpio;
 let events;
-let pollHandle;
 let doors;
+let pollHandle;
+
+function listenerCount() {
+    return events.listenerCount('opened') +
+        events.listenerCount('closed');
+}
 
 function poll() {
     const last = {};
@@ -57,9 +62,22 @@ module.exports.toggle = function(door) {
     });
 };
 
+module.exports.isOpen = function(door) {
+
+    return new Promise(resolve => {
+
+        process.nextTick(() => {
+            const value = rpio.read(door.gpio.sensor);
+            resolve(value === 1);
+        });
+
+    });
+
+};
+
 
 module.exports.subscribe = function(name, cb) {
-    if (countListeners() === 0) {
+    if (listenerCount() === 0) {
         logger.info('starting polling');
         poll();
     }
@@ -72,16 +90,11 @@ module.exports.unsubscribe = function(name, handle) {
 
     events.removeListener(name, handle.__cb);
 
-    if (countListeners() === 0) {
+    if (listenerCount() === 0) {
         logger.info('stopped polling');
         clearInterval(pollHandle);
     }
 };
-
-function countListeners() {
-    return events.listenerCount('opened') +
-        events.listenerCount('closed');
-}
 
 module.exports.pollInterval = 100;
 

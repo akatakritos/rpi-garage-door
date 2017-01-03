@@ -1,16 +1,19 @@
 const gpio = require('./gpio-gateway');
 const logger = require('./logger');
+const eventLog = require('./door-log');
 
 module.exports = function(app) {
     const io = require('socket.io')(app);
 
-    gpio.subscribe('opened', door => {
-        logger.info(`Notifying sockets that "${door.name}" has opened.`);
-        io.emit('opened', { id:door.id });
+    ['opened', 'closed'].forEach(eventName => {
+
+        gpio.subscribe(eventName, door => {
+            logger.info(`Notifying sockets that "${door.name}" has ${eventName}`);
+
+            const event = eventLog.add(door, eventName);
+            io.emit(eventName, event);
+        });
+
     });
 
-    gpio.subscribe('closed', door => {
-        logger.info(`Notifying sockets that "${door.name}" has closed.`);
-        io.emit('closed', { id: door.id });
-    });
 };

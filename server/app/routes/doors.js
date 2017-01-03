@@ -2,6 +2,7 @@ const router = require('express').Router();
 const doors = require('../../config/doors');
 const gpio = require('../lib/gpio-gateway');
 const _ = require('lodash');
+const doorLog = require('../lib/door-log');
 
 router.get('/doors', (req, res) => {
 
@@ -30,6 +31,11 @@ router.post('/doors/:id/toggle', (req, res) => {
         res.status(200).send();
     });
 
+});
+
+router.get('/doors/logs', (req, res) => {
+    const logs = doorLog.recent(10);
+    res.json(logs);
 });
 
 module.exports = router;

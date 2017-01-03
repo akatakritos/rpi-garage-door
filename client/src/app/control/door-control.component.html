@@ -1,0 +1,20 @@
+<div class="panel" [ngClass]="{ 'panel-warning': door.open, 'panel-success': !door.open }">
+
+    <div class="panel-heading" >
+        {{ door.name }}
+    </div>
+
+    <div class="panel-body">
+        <div class="alert-container">
+            <div class="alert alert-info" role="alert" *ngIf="message">
+                {{ message }}
+            </div>
+        </div>
+        <p>Status: <strong>{{ door.open ? 'Open' : 'Closed' }}</strong></p>
+        <div>
+            <button type="button" class="btn btn-default" (click)="toggle()">
+                {{ door.open ? 'Close Door' : 'Open Door' }}
+            </button>
+        </div>
+    </div>
+</div>

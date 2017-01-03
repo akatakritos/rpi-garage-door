@@ -5,7 +5,7 @@ const transports = [];
 
 if (config.env !== 'test') {
     transports.push(new winston.transports.Console({
-        level: 'debug',
+        level: 'info',
         json: false,
         colorize: config.env === 'development',  // color escape codes clutter production logs
         timestamp: config.env !== 'development', // want them in production but dont need in dev

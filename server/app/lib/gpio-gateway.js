@@ -42,6 +42,8 @@ function poll() {
 }
 
 module.exports.init = function(configuredDoors, rpioImpl) {
+    logger.info('Initializing connections to gpio');
+
     rpio = rpioImpl;
     doors = configuredDoors;
     events = new EventEmitter();
@@ -96,5 +98,5 @@ module.exports.unsubscribe = function(name, handle) {
     }
 };
 
-module.exports.pollInterval = 100;
+module.exports.pollInterval = 1000;
 

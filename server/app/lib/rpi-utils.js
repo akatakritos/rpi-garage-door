@@ -1,5 +1,6 @@
 const config = require('../../config/config');
 const fs = require('fs');
+const os = require('os');
 
 const logger = require('./logger');
 
@@ -25,3 +26,28 @@ module.exports.temperature = function() {
 
     });
 };
+
+module.exports.ips = function() {
+    const results = [];
+
+    const ifaces = os.networkInterfaces();
+    Object.keys(ifaces).forEach(ifname => {
+        let alias = 0;
+
+        ifaces[ifname].forEach(iface => {
+            if ('IPv4' !== iface.family || iface.internal !== false) {
+                // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+                return;
+            }
+
+            if (alias >= 1) {
+                results.push({ name: `${ifname}:${alias}`, ip: iface.address });
+            } else {
+                results.push({ name: ifname, ip: iface.address });
+            }
+            ++alias;
+        });
+    });
+
+    return results;
+}

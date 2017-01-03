@@ -1,0 +1,28 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { ControlPageComponent } from './control-page.component';
+import { DoorControlComponent } from './door-control.component';
+import { DoorService, Door } from './door.service';
+
+export {
+    ControlPageComponent,
+    DoorControlComponent,
+    DoorService,
+    Door,
+}
+
+
+const routes: Routes = [
+];
+
+@NgModule({
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+    ],
+    declarations: [ControlPageComponent, DoorControlComponent],
+    exports: [ RouterModule ],
+    providers: [ DoorService ]
+})
+export class ControlModule { }

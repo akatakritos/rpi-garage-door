@@ -4,35 +4,6 @@ const os = require('os');
 
 const rpi = require('../lib/rpi-utils');
 
-module.exports = function(app) {
-    app.use('/api', router);
-};
-
-function ips() {
-    const results = [];
-
-    const ifaces = os.networkInterfaces();
-    Object.keys(ifaces).forEach(ifname => {
-        let alias = 0;
-
-        ifaces[ifname].forEach(iface => {
-            if ('IPv4' !== iface.family || iface.internal !== false) {
-                // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
-                return;
-            }
-
-            if (alias >= 1) {
-                results.push({ name: `${ifname}:${alias}`, ip: iface.address });
-            } else {
-                results.push({ name: ifname, ip: iface.address });
-            }
-            ++alias;
-        });
-    });
-
-    return results;
-}
-
 router.get('/status', (req, res) => {
 
     rpi.temperature()
@@ -45,7 +16,7 @@ router.get('/status', (req, res) => {
                 totalMem: os.totalmem(),
                 systemUptime: os.uptime(),
                 serverUptime: process.uptime(),
-                ips: ips(),
+                ips: rpi.ips(),
             };
 
             res.json(result);
@@ -55,3 +26,5 @@ router.get('/status', (req, res) => {
             res.err(err);
         });
 });
+
+module.exports = router;

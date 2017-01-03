@@ -2,11 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StatusModule } from './status/status.module';
+import { ControlModule, ControlPageComponent } from './control/control.module';
+
+const routes: Routes = [
+    { path: '', component: ControlPageComponent }
+];
 
 @NgModule({
   declarations: [
@@ -16,9 +20,9 @@ import { StatusModule } from './status/status.module';
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule,
-    AppRoutingModule,
+    RouterModule.forRoot(routes),
     StatusModule,
+    ControlModule
   ],
   providers: [],
   bootstrap: [AppComponent]

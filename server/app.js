@@ -4,26 +4,34 @@ const expressWinston = require('express-winston');
 const path = require('path');
 const glob = require('glob');
 const fs = require('fs');
+const http = require('http');
 
 const logger = require('./app/lib/logger');
 const config = require('./config/config');
 
-var app = express();
+const app = express();
+
+const gpio = require('./app/lib/gpio-gateway');
+const doors = require('./config/doors');
+const hw = config.pi ? require('rpio') : require('./app/lib/fake-rpio');
+gpio.init(doors, hw);
 
 app.use(expressWinston.logger({
-    winstonInstance: logger
+    winstonInstance: logger,
 }));
 
 app.use(bodyParser.json());
 
 function tryStaticGzipped(req, res, next) {
 
-    const diskPath = path.join(config.root, 'public', req.url) + '.gz';
+     // eslint-disable-next-line prefer-template
+    const gzipFile = `${req.url}.gz`;
+    const diskPath = path.join(config.root, 'public', gzipFile);
 
     fs.exists(diskPath, exists => {
 
         if (exists) {
-            req.url = req.url + '.gz';
+            req.url = gzipFile; // eslint-disable-line no-param-reassign
             res.set('Content-Encoding', 'gzip');
         }
 
@@ -33,42 +41,43 @@ function tryStaticGzipped(req, res, next) {
 }
 
 app.get('*.bundle.js', tryStaticGzipped);
-//app.get('*.bundle.css', tryStaticGzipped);
 
 app.use(express.static(path.join(config.root, 'public')));
 
-const controllers = glob.sync(path.join(config.root, 'app', 'routes', '*.js'));
-controllers.forEach(function (controller) {
-    require(controller)(app);
-});
+const routes = glob.sync(path.join(config.root, 'app', 'routes', '*.js'))
+    .map(c => require(c));
+app.use('/api', routes);
 
 
 const indexFile = path.join(config.root, 'public', 'index.html');
-app.use(function (req, res) {
+app.use((req, res) => {
     res.status(200).sendFile(indexFile);
 });
 
 if (config.env === 'development') {
-    app.use(function (err, req, res) {
+    app.use((err, req, res) => {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
             error: err,
-            title: 'error'
+            title: 'error',
         });
     });
 }
 
-app.use(function (err, req, res) {
+app.use((err, req, res) => {
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
         error: {},
-        title: 'error'
+        title: 'error',
     });
 });
 
-app.listen(config.port, () => {
-    logger.info(`Express listening on ${config.port}.`);
+const server = http.createServer(app);
+require('./app/lib/websockets')(server);
 
+
+server.listen(config.port, () => {
+    logger.info(`Express listening on ${config.port}.`);
 });

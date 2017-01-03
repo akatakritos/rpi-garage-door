@@ -4,7 +4,7 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 
 const defaults = {
-    port: 300,
+    port: 3000,
     root,
     pi: os.platform() === 'linux',
 };

@@ -3,20 +3,21 @@ const path = require('path');
 
 const root = path.join(__dirname, '..');
 
+const defaults = {
+    port: 300,
+    root,
+    pi: os.platform() === 'linux',
+};
+
+// override defaults if needed
 const config = {
     development: {
         env: 'development',
-        port: 3000,
-        root,
-        pi: os.platform() === 'linux'
     },
     test: {
         env: 'test',
-        port: 3000,
-        root,
-        pi: os.platform() === 'linux'
-    }
+    },
 };
 
 
-module.exports = config[process.env.NODE_ENV || 'development'];
+module.exports = Object.assign({}, defaults, config[process.env.NODE_ENV || 'development']);

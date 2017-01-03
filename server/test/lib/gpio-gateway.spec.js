@@ -9,16 +9,16 @@ const doors = [
         name: 'Door 1',
         gpio: {
             toggle: 1,
-            sensor: 2
-        }
+            sensor: 2,
+        },
     },
     {
         name: 'Door 2',
         gpio: {
             toggle: 3,
-            sensor: 4
-        }
-    }
+            sensor: 4,
+        },
+    },
 ];
 
 // for faster tests
@@ -71,6 +71,6 @@ describe('GPIO Controller', () => {
                 done();
             });
 
-        })
+        });
     });
 });

@@ -3,12 +3,11 @@ const logger = require('./logger');
 
 let rpio;
 let events;
-let handle;
+let pollHandle;
 let doors;
 
 function poll() {
-
-    let last = {};
+    const last = {};
 
     const poller = () => {
         logger.debug('polling sensors');
@@ -16,12 +15,15 @@ function poll() {
         doors.forEach(door => {
             const value = rpio.read(door.gpio.sensor);
 
-            if (value != last[door.name]) {
+            if (value !== last[door.name]) {
 
                 if (value) {
+
                     logger.info('door opened', door);
                     events.emit('opened', door);
+
                 } else {
+
                     logger.info('door closed', door);
                     events.emit('closed', door);
                 }
@@ -31,7 +33,7 @@ function poll() {
         });
     };
 
-    handle = setInterval(poller, module.exports.pollInterval);
+    pollHandle = setInterval(poller, module.exports.pollInterval);
 }
 
 module.exports.init = function(configuredDoors, rpioImpl) {
@@ -72,7 +74,7 @@ module.exports.unsubscribe = function(name, handle) {
 
     if (countListeners() === 0) {
         logger.info('stopped polling');
-        clearInterval(handle);
+        clearInterval(pollHandle);
     }
 };
 

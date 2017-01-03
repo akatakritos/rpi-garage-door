@@ -9,5 +9,5 @@ module.exports = {
     msleep: noop,
     poll: noop,
     HIGH: 1,
-    LOW: 0
+    LOW: 0,
 };

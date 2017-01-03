@@ -13,5 +13,5 @@ if (config.env !== 'test') {
 }
 
 module.exports = new winston.Logger({
-    transports
+    transports,
 });

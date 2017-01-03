@@ -9,7 +9,7 @@ describe('rpi-utils', () => {
     afterEach(() => td.reset());
 
     describe('#temperature', () => {
-        var before;
+        let before;
         beforeEach(() => before = config.pi);
         afterEach(() => config.pi = before);
 
@@ -51,5 +51,4 @@ describe('rpi-utils', () => {
             });
         });
     });
-
 });

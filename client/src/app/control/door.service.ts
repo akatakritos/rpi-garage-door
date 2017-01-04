@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 const io = require('socket.io-client');
 
@@ -9,31 +10,36 @@ export interface Door {
     name: string;
     open: boolean;
     id: number;
+    lastChange: string;
 }
 
 export interface DoorEvent {
     id: number;
-    event: DoorEventName;
+    name: string;
+    eventName: DoorEventName;
+    timestamp: string;
 }
 
 @Injectable()
 export class DoorService {
 
-    events: Observable<DoorEvent>;
+    private _events: Subject<DoorEvent>;
 
     constructor(private http: Http) {
 
-        this.events = Observable.create(observer => {
-            console.log('opened socket');
-            const socket = io('');
+        this._events = new Subject();
+        console.log('opened socket');
+        const socket = io('');
 
-            ['opened', 'closed'].forEach(event => {
-                socket.on(event, data => {
-                    observer.next({ id: data.id, event });
-                });
+        ['opened', 'closed'].forEach(event => {
+            socket.on(event, data => {
+                this._events.next(data);
             });
-
         });
+    }
+
+    events(): Observable<DoorEvent> {
+        return this._events;
     }
 
     getDoors() {
@@ -47,5 +53,9 @@ export class DoorService {
     }
 
 
+    logs() {
+        return this.http.get('/api/doors/logs')
+            .map(response => response.json());
+    }
 
 }

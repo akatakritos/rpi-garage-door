@@ -50,4 +50,4 @@ module.exports.ips = function() {
     });
 
     return results;
-}
+};

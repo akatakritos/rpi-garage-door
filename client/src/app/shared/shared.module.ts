@@ -5,6 +5,8 @@ import { FahrenheitPipe } from './fahrenheit.pipe';
 import { ProgressBarComponent } from './progress-bar.component';
 import { DhmsPipe } from './dhms.pipe';
 import { AlertComponent } from './alert.component';
+import { TimeagoPipe } from './timeago.pipe';
+import { LocalTimePipe } from './local-time.pipe';
 
 export { MbPipe, FahrenheitPipe, ProgressBarComponent, AlertComponent };
 
@@ -12,13 +14,15 @@ export { MbPipe, FahrenheitPipe, ProgressBarComponent, AlertComponent };
   imports: [
     CommonModule
   ],
-  declarations: [MbPipe, FahrenheitPipe, ProgressBarComponent, DhmsPipe, AlertComponent ],
+  declarations: [MbPipe, FahrenheitPipe, ProgressBarComponent, DhmsPipe, AlertComponent, TimeagoPipe, LocalTimePipe ],
   exports: [
     MbPipe,
     FahrenheitPipe,
     ProgressBarComponent,
     DhmsPipe,
     AlertComponent,
+    TimeagoPipe,
+    LocalTimePipe,
   ]
 })
 export class SharedModule { }

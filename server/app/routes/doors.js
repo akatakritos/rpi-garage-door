@@ -3,16 +3,20 @@ const doors = require('../../config/doors');
 const gpio = require('../lib/gpio-gateway');
 const _ = require('lodash');
 const doorLog = require('../lib/door-log');
+const utils = require('../lib/utils');
 
 router.get('/doors', (req, res) => {
 
     Promise.all(doors.map(gpio.isOpen)).then(states => {
 
         const result = _.zip(doors, states).map(combined => {
+            const id = combined[0].id;
+
             return {
                 name: combined[0].name,
-                id: combined[0].id,
-                open: combined[1]
+                id,
+                open: combined[1],
+                lastChange: _.get(doorLog.last(e => e.id === id), 'timestamp', utils.processStartTime()),
             };
         });
 

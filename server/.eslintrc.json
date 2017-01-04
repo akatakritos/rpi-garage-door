@@ -215,7 +215,7 @@
         "max-len": [
             2,
             { // Disallow lines over 100 characters
-                "code": 100,
+                "code": 120,
                 "ignoreUrls": true
             }
         ],

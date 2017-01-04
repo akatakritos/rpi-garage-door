@@ -37,6 +37,11 @@ module.exports.recent = function recent(num = 5, filter) {
     return result;
 };
 
+module.exports.last = function(predicate) {
+
+    return this.recent(1, predicate)[0];
+};
+
 module.exports.clear = function clear() {
     entries = [];
 };

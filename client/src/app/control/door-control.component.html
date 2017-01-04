@@ -8,7 +8,9 @@
         <div class="alert-container">
             <alert *ngIf="message" [message]="message" [type]="'info'" (dismissed)="onAlertDismissed()"></alert>
         </div>
-        <p>Status: <strong>{{ door.open ? 'Open' : 'Closed' }}</strong></p>
+        <p>Status: <strong>{{ door.open ? 'Open' : 'Closed' }}</strong> since
+            <span title="{{ door.lastChange | localTime }}">{{ door.lastChange | timeago }}</span>
+        </p>
         <div>
             <button type="button" class="btn btn-default" (click)="toggle()">
                 {{ door.open ? 'Close Door' : 'Open Door' }}

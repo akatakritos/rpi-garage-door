@@ -20,7 +20,7 @@ export class ControlPageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.doorService.getDoors().subscribe(d => this.doors = d);
-        this.events = this.doorService.events.subscribe(e => this.handleEvent(e));
+        this.events = this.doorService.events().subscribe(e => this.handleEvent(e));
     }
 
     ngOnDestroy() {
@@ -32,12 +32,14 @@ export class ControlPageComponent implements OnInit, OnDestroy {
         const door = this.doors.find(d => d.id === e.id);
         const child = this.doorComponents.find(c => c.door === door);
 
-        if (e.event === 'closed') {
+        door.lastChange = e.timestamp;
+
+        if (e.eventName === 'closed') {
             door.open = false;
-            child.postMessage('Door Opened');
-        } else if (e.event === 'opened') {
-            door.open = true;
             child.postMessage('Door Closed');
+        } else if (e.eventName === 'opened') {
+            door.open = true;
+            child.postMessage('Door Opened');
         }
     }
 

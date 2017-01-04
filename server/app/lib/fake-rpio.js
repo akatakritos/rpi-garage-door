@@ -1,3 +1,4 @@
+// eslint-disable-file object-shorthand
 const noop = () => {};
 const logger = require('./logger');
 const doors = require('../../config/doors');
@@ -24,11 +25,11 @@ function getDoor(togglePin) {
 
 module.exports = {
 
-    open : function(pin, state) {
+    open(pin, state) {
         logger.debug(`GPIO: Open PIN${pin} as ${state}`);
     },
 
-    write: function(pin, value) {
+    write(pin, value) {
         logger.info(`GPIO: Write ${value} to PIN${pin}`);
         state[pin] = value;
 
@@ -38,11 +39,12 @@ module.exports = {
         }
     },
 
-    read: function(pin) {
+    read(pin) {
         const value = state[pin] ? 1 : 0;
         logger.debug(`GPIO: Read ${value} from PIN${pin}`);
         return value;
     },
+
     sleep: noop,
     msleep: noop,
     HIGH: 1,

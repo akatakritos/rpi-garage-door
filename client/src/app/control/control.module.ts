@@ -5,6 +5,7 @@ import { ControlPageComponent } from './control-page.component';
 import { DoorControlComponent } from './door-control.component';
 import { DoorService, Door } from './door.service';
 import { SharedModule } from '../shared/shared.module';
+import { DoorEventLogComponent } from './door-event-log.component';
 
 export {
     ControlPageComponent,
@@ -23,7 +24,7 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         SharedModule
     ],
-    declarations: [ControlPageComponent, DoorControlComponent],
+    declarations: [ControlPageComponent, DoorControlComponent, DoorEventLogComponent],
     exports: [ RouterModule ],
     providers: [ DoorService ]
 })

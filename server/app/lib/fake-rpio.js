@@ -3,18 +3,18 @@ const noop = () => {};
 const logger = require('./logger');
 const doors = require('../../config/doors');
 
-const state = {
+let state = {
 
 };
 
-function simulateDoorSensorChange(door) {
+function simulateDoorSensorChange(door, timeout) {
     logger.info(`GPIO: Queueing door status change on Door "${door.name}"`);
     const current = state[door.gpio.sensor] ? 1 : 0;
 
     setTimeout(() => {
         state[door.gpio.sensor] = current ? 0 : 1;
         logger.info(`GPIO: Faked status change on door "${door.name}" to ${state[door.gpio.sensor]}`);
-    }, 2500);
+    }, timeout);
 
 }
 
@@ -35,7 +35,7 @@ module.exports = {
 
         const door = getDoor(pin);
         if (door && value === 1) {
-            simulateDoorSensorChange(door);
+            simulateDoorSensorChange(door, this.statusChangeTime);
         }
     },
 
@@ -45,8 +45,15 @@ module.exports = {
         return value;
     },
 
+    reset() {
+        state = {};
+    },
+
     sleep: noop,
     msleep: noop,
     HIGH: 1,
     LOW: 0,
+    statusChangeTime : 2500,
 };
+
+

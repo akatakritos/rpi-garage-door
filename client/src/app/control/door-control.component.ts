@@ -21,13 +21,11 @@ export class DoorControlComponent implements OnInit {
     }
 
     toggle() {
-        console.log('toggled');
         this.toggled.emit();
     }
 
     private handle: any;
     postMessage(msg: string) {
-        console.log('received message', msg);
 
         this.message = msg;
 

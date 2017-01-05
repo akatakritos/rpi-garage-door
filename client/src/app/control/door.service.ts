@@ -28,7 +28,6 @@ export class DoorService {
     constructor(private http: Http) {
 
         this._events = new Subject();
-        console.log('opened socket');
         const socket = io('');
 
         ['opened', 'closed'].forEach(event => {

@@ -45,9 +45,11 @@ export class ControlPageComponent implements OnInit, OnDestroy {
 
     toggle(door:Door) {
         const child = this.doorComponents.find(c => c.door === door);
-        child.postMessage("Sending door command");
 
-        this.doorService.toggle(door).subscribe(r => console.log('yay'));
+        this.doorService.toggle(door).subscribe(() => {
+            const verb = door.open ? 'Closing' : 'Opening';
+            child.postMessage(`${verb} the door`);
+        });
     }
 
 }

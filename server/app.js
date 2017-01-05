@@ -5,6 +5,7 @@ const path = require('path');
 const glob = require('glob');
 const fs = require('fs');
 const http = require('http');
+const httpBasicAuth = require('./app/middleware/http-basic-auth');
 
 const logger = require('./app/lib/logger');
 const config = require('./config/config');
@@ -14,6 +15,7 @@ const app = express();
 const gpio = require('./app/lib/gpio-gateway');
 const doors = require('./config/doors');
 const hw = config.pi ? require('rpio') : require('./app/lib/fake-rpio');
+
 gpio.init(doors, hw);
 
 app.use(expressWinston.logger({
@@ -21,6 +23,11 @@ app.use(expressWinston.logger({
 }));
 
 app.use(bodyParser.json());
+
+if (config.auth.type === 'http-basic') {
+    logger.info(`Enabling HTTP Basic Auth for ${config.auth.user}`);
+    app.use(httpBasicAuth(config.auth.user, config.auth.password));
+}
 
 function tryStaticGzipped(req, res, next) {
 

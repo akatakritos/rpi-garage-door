@@ -75,7 +75,8 @@ app.use((err, req, res) => {
 });
 
 const server = http.createServer(app);
-require('./app/lib/websockets')(server);
+const io = require('socket.io')(server);
+require('./app/lib/websockets')(io);
 
 
 server.listen(config.port, () => {

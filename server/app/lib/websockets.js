@@ -2,8 +2,7 @@ const gpio = require('./gpio-gateway');
 const logger = require('./logger');
 const eventLog = require('./door-log');
 
-module.exports = function(app) {
-    const io = require('socket.io')(app);
+module.exports = function(io) {
 
     ['opened', 'closed'].forEach(eventName => {
 

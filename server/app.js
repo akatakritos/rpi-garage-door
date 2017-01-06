@@ -89,3 +89,8 @@ require('./app/lib/websockets')(io);
 server.listen(config.port, () => {
     logger.info(`Express listening on ${config.port}.`);
 });
+
+const checker = require('./app/lib/open-door-checker');
+if (config.sms.enabled) {
+    checker.setup();
+}

@@ -3,8 +3,9 @@ const router = express.Router();
 const os = require('os');
 
 const rpi = require('../lib/rpi-utils');
+const logger = require('../lib/logger').prefixed('status route');
 
-router.get('/status', (req, res) => {
+router.get('/status', (req, res, next) => {
 
     rpi.temperature()
         .then(celsius => {
@@ -23,7 +24,8 @@ router.get('/status', (req, res) => {
 
         })
         .catch(err => {
-            res.err(err);
+            logger.error('problem getting statuses', err);
+            next(err);
         });
 });
 

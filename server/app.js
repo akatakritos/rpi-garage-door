@@ -3,11 +3,11 @@ const bodyParser = require('body-parser');
 const expressWinston = require('express-winston');
 const path = require('path');
 const glob = require('glob');
-const fs = require('fs');
 const http = require('http');
 const httpBasicAuth = require('./app/middleware/http-basic-auth');
+const tryStaticGzipped = require('./app/middleware/try-static-gzipped');
 
-const logger = require('./app/lib/logger');
+const logger = require('./app/lib/logger').prefixed('app');
 const config = require('./config/config');
 
 const app = express();
@@ -29,56 +29,35 @@ if (config.auth.type === 'http-basic') {
     app.use(httpBasicAuth(config.auth.user, config.auth.password));
 }
 
-function tryStaticGzipped(req, res, next) {
 
-     // eslint-disable-next-line prefer-template
-    const gzipFile = `${req.url}.gz`;
-    const diskPath = path.join(config.root, 'public', gzipFile);
+const publicPath = path.join(config.root, 'public');
 
-    fs.exists(diskPath, exists => {
-
-        if (exists) {
-            req.url = gzipFile; // eslint-disable-line no-param-reassign
-            res.set('Content-Encoding', 'gzip');
-        }
-
-        next();
-    });
-
-}
-
-app.get('*.bundle.js', tryStaticGzipped);
-
-app.use(express.static(path.join(config.root, 'public')));
+app.get('*.bundle.js', tryStaticGzipped(path.join(publicPath)));
+app.use(express.static(publicPath));
 
 const routes = glob.sync(path.join(config.root, 'app', 'routes', '*.js'))
     .map(c => require(c));
 app.use('/api', routes);
 
 
-const indexFile = path.join(config.root, 'public', 'index.html');
-app.use((req, res) => {
-    res.status(200).sendFile(indexFile);
-});
 
-if (config.env === 'development') {
-    app.use((err, req, res) => {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err,
-            title: 'error',
-        });
-    });
-}
+app.use(expressWinston.errorLogger({
+    winstonInstance: logger,
+}));
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
     res.status(err.status || 500);
-    res.render('error', {
+    res.json({
         message: err.message,
         error: {},
         title: 'error',
     });
+});
+
+// angular routes
+const indexFile = path.join(config.root, 'public', 'index.html');
+app.use((req, res) => {
+    res.status(200).sendFile(indexFile);
 });
 
 const server = http.createServer(app);

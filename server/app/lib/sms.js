@@ -1,5 +1,6 @@
 const config = require('../../config/config');
 const twilio = require('twilio');
+const logger = require('./logger').prefixed('sms');
 
 class SmsClient {
 
@@ -9,6 +10,8 @@ class SmsClient {
 
     alert(message) {
         return new Promise((resolve, reject) => {
+            logger.verbose('sending SMS to twilio');
+
             this.client.messages.create({
                 body: message,
                 to: config.sms.to,

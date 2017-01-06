@@ -1,6 +1,6 @@
 // eslint-disable-file object-shorthand
 const noop = () => {};
-const logger = require('./logger');
+const logger = require('./logger').prefixed('fake gpio');
 const doors = require('../../config/doors');
 
 let state = {
@@ -8,12 +8,12 @@ let state = {
 };
 
 function simulateDoorSensorChange(door, timeout) {
-    logger.info(`GPIO: Queueing door status change on Door "${door.name}"`);
+    logger.info(`queueing door status change on Door "${door.name}"`);
     const current = state[door.gpio.sensor] ? 1 : 0;
 
     setTimeout(() => {
         state[door.gpio.sensor] = current ? 0 : 1;
-        logger.info(`GPIO: Faked status change on door "${door.name}" to ${state[door.gpio.sensor]}`);
+        logger.info(`faked status change on door "${door.name}" to ${state[door.gpio.sensor]}`);
     }, timeout);
 
 }
@@ -25,12 +25,9 @@ function getDoor(togglePin) {
 
 module.exports = {
 
-    open(pin, state) {
-        logger.debug(`GPIO: Open PIN${pin} as ${state}`);
-    },
+    open: noop,
 
     write(pin, value) {
-        logger.info(`GPIO: Write ${value} to PIN${pin}`);
         state[pin] = value;
 
         const door = getDoor(pin);
@@ -40,9 +37,7 @@ module.exports = {
     },
 
     read(pin) {
-        const value = state[pin] ? 1 : 0;
-        logger.debug(`GPIO: Read ${value} from PIN${pin}`);
-        return value;
+        return state[pin] ? 1 : 0;
     },
 
     reset() {
@@ -51,8 +46,6 @@ module.exports = {
 
     sleep: noop,
     msleep: noop,
-    HIGH: 1,
-    LOW: 0,
     statusChangeTime : 2500,
 };
 

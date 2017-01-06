@@ -18,7 +18,7 @@ module.exports.temperature = function() {
                 return reject(err);
             }
 
-            logger.debug(`read raw "${data}"`);
+            logger.debug(`temperature: read raw "${data}"`);
 
             const milligrades = parseInt(data.toString().trim(), 10);
             resolve(milligrades / 1000);

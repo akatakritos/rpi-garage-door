@@ -1,18 +1,27 @@
 const basicAuth = require('basic-auth');
+const logger = require('../lib/logger').prefixed('auth');
 
-// app.use(httpBasicAuth('username', 'password))
+// usage: app.use(httpBasicAuth('username', 'password))
 
 module.exports = function(username, password) {
 
 
     return function basicAuthMiddleware(req, res, next) {
 
-        const user = basicAuth(req);
-
-        if (!user || user.name !== username || user.pass !== password) {
+        function respondUnauthorized() {
             res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
             res.send(401);
-            return;
+        }
+
+        const user = basicAuth(req);
+
+        if (!user) {
+            return respondUnauthorized();
+
+        } else if (user.name !== username || user.pass !== password) {
+            logger.warn(`unauthorized login attempt for ${user.name}`);
+
+            return respondUnauthorized();
         }
 
         return next();

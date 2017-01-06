@@ -1,10 +1,14 @@
 const EventEmitter = require('events').EventEmitter;
-const logger = require('./logger');
+const logger = require('./logger').prefixed('gateway');
+const decorate = require('./rpio-decorate');
 
 let rpio;
 let events;
 let doors;
 let pollHandle;
+const HIGH = 1;
+const LOW = 0;
+
 
 function listenerCount() {
     return events.listenerCount('opened') +
@@ -42,9 +46,9 @@ function poll() {
 }
 
 module.exports.init = function(configuredDoors, rpioImpl) {
-    logger.info('Initializing connections to gpio');
+    logger.info('initializing connections to gpio');
 
-    rpio = rpioImpl;
+    rpio = decorate(rpioImpl);
     doors = configuredDoors;
     events = new EventEmitter();
 };
@@ -54,9 +58,9 @@ module.exports.toggle = function(door) {
     return new Promise(resolve => {
 
         process.nextTick(() => {
-            rpio.write(door.gpio.toggle, rpio.HIGH);
+            rpio.write(door.gpio.toggle, HIGH);
             rpio.msleep(20);
-            rpio.write(door.gpio.toggle, rpio.LOW);
+            rpio.write(door.gpio.toggle, LOW);
 
             resolve();
         });

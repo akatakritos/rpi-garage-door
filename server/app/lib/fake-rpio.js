@@ -36,6 +36,8 @@ module.exports = {
         }
     },
 
+    pud: noop,
+
     read(pin) {
         return state[pin] ? 1 : 0;
     },

@@ -2,9 +2,15 @@ const logger = require('./logger').prefixed('gpio');
 
 module.exports = function(rpio) {
     return {
-        open(pin, state) {
-            logger.debug(`open PIN-${pin} as ${state}`);
-            return rpio.open(pin, state);
+        open(pin, state, initial) {
+            const type = state === 1 ? 'output' : 'input';
+            logger.debug(`open PIN-${pin} as ${type} initial: ${initial}`);
+            return rpio.open(pin, state, initial);
+        },
+
+        pud(pin, pullup) {
+            logger.debug(`configure PIN-${pin} as pullup ${pullup}`);
+            return rpio.pud(pin, pullup);
         },
 
         write(pin, value) {

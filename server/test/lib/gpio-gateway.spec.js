@@ -46,7 +46,7 @@ describe('GPIO Controller', () => {
         it ('reads from the sensor and converts to bool', () => {
             gateway.init(doors, rpio);
 
-            td.when(rpio.read(2)).thenReturn(1);
+            td.when(rpio.read(2)).thenReturn(0);
 
             return gateway.isOpen(doors[0]).then(open => {
                 expect(open).to.be.true;
@@ -59,7 +59,7 @@ describe('GPIO Controller', () => {
 
             gateway.init(doors, rpio);
 
-            td.when(rpio.read(4)).thenReturn(0,0,1);
+            td.when(rpio.read(4)).thenReturn(1,1,0);
 
             const handle = gateway.subscribe('opened', door => {
                 expect(door.name).to.equal('Door 2');
@@ -74,7 +74,7 @@ describe('GPIO Controller', () => {
 
             gateway.init(doors, rpio);
 
-            td.when(rpio.read(2)).thenReturn(1,1,0);
+            td.when(rpio.read(2)).thenReturn(0,0,1);
 
             const handle = gateway.subscribe('opened', door => {
                 expect(door.name).to.equal('Door 1');

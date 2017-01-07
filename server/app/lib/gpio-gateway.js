@@ -8,7 +8,11 @@ let doors;
 let pollHandle;
 const HIGH = 1;
 const LOW = 0;
-
+const INPUT = 0x0;
+const OUTPUT = 0x1;
+const PULL_OFF = 0x0;
+const PULL_DOWN = 0x1;
+const PULL_UP = 0x2;
 
 function listenerCount() {
     return events.listenerCount('opened') +
@@ -22,23 +26,24 @@ function poll() {
         logger.debug('polling sensors');
 
         doors.forEach(door => {
-            const value = rpio.read(door.gpio.sensor);
+            module.exports.isOpen(door).then(value => {
 
-            if (value !== last[door.name]) {
+                if (value !== last[door.name]) {
 
-                if (value) {
+                    if (value) {
 
-                    logger.info('door opened', door);
-                    events.emit('opened', door);
+                        logger.info('door opened', door);
+                        events.emit('opened', door);
 
-                } else {
+                    } else {
 
-                    logger.info('door closed', door);
-                    events.emit('closed', door);
+                        logger.info('door closed', door);
+                        events.emit('closed', door);
+                    }
                 }
-            }
 
-            last[door.name] = value;
+                last[door.name] = value;
+            });
         });
     };
 
@@ -51,6 +56,10 @@ module.exports.init = function(configuredDoors, rpioImpl) {
     rpio = decorate(rpioImpl);
     doors = configuredDoors;
     events = new EventEmitter();
+
+    rpio.open(doors[0].gpio.toggle, OUTPUT, HIGH);
+    rpio.pud(doors[0].gpio.sensor, PULL_DOWN);
+    rpio.open(doors[0].gpio.sensor, INPUT);
 };
 
 module.exports.toggle = function(door) {
@@ -58,9 +67,9 @@ module.exports.toggle = function(door) {
     return new Promise(resolve => {
 
         process.nextTick(() => {
-            rpio.write(door.gpio.toggle, HIGH);
-            rpio.msleep(20);
             rpio.write(door.gpio.toggle, LOW);
+            rpio.msleep(20);
+            rpio.write(door.gpio.toggle, HIGH);
 
             resolve();
         });
@@ -74,7 +83,7 @@ module.exports.isOpen = function(door) {
 
         process.nextTick(() => {
             const value = rpio.read(door.gpio.sensor);
-            resolve(value === 1);
+            resolve(value === LOW);
         });
 
     });

@@ -38,7 +38,7 @@ router.post('/doors/:id/toggle', (req, res, next) => {
     gpio.toggle(door).then(() => {
         res.status(200).send();
     })
-    .reject(err => {
+    .catch(err => {
         logger.error(`error toggling door ${door.name}`, err);
         next(err);
     });

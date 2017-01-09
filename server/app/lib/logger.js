@@ -1,6 +1,8 @@
 const winston = require('winston');
-const config = require('../../config/config');
+require('winston-daily-rotate-file');
 const path = require('path');
+
+const config = require('../../config/config');
 
 const logFolder = path.join(config.root, 'logs');
 
@@ -23,6 +25,7 @@ if (config.env === 'production') {
         level: 'info',
         timestamp: true,
         colorize: false,
+        json: false,
     }));
 }
 

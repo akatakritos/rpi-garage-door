@@ -46,6 +46,7 @@ app.use(expressWinston.errorLogger({
 }));
 
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+    logger.error(err.message);
     res.status(err.status || 500);
     res.json({
         message: err.message,
@@ -66,6 +67,7 @@ require('./app/lib/websockets')(io);
 
 server.listen(config.port, () => {
     logger.info(`Express listening on ${config.port}.`);
+    logger.info(`Running in the ${config.env} environment`);
 });
 
 const checker = require('./app/lib/open-door-checker');

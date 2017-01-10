@@ -10,6 +10,16 @@ export interface NetworkInterface {
     ip: string;
 }
 
+export interface TimeData {
+    utc: string;
+    local: string;
+}
+
+export interface AlertData {
+    name: string;
+    enabled: boolean;
+}
+
 export interface StatusData {
     mem: number;
     hostname: string;
@@ -19,6 +29,10 @@ export interface StatusData {
     systemUptime: number;
     serverUptime: number;
     ips: NetworkInterface[];
+    timezone: string;
+    environment: string;
+    time: TimeData;
+    alerts: AlertData[];
 }
 
 @Injectable()

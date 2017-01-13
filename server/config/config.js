@@ -6,15 +6,10 @@ require('dotenv').config({ silent: true });
 const root = path.join(__dirname, '..');
 
 const defaults = {
-    port: 3000,
+    port: 3001,
     root,
     pi: os.platform() === 'linux',
     timezone: 'America/Chicago',
-    auth: {
-        type: process.env.AUTH_BASIC_USER && process.env.AUTH_BASIC_PASS ? 'http-basic' : null,
-        user: process.env.AUTH_BASIC_USER,
-        password: process.env.AUTH_BASIC_PASS,
-    },
     sms: {
         enabled: ['TWILIO_NUMBER', 'TWILIO_AUTH_TOKEN', 'TWILIO_ACCOUNT_SID'].every(k => process.env[k]),
         from: process.env.TWILIO_NUMBER,

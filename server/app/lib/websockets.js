@@ -10,7 +10,7 @@ module.exports = function(io) {
             logger.verbose(`notifying "${door.name}" has ${eventName}`);
 
             const event = eventLog.add(door, eventName);
-            io.emit(eventName, event);
+            io.emit(`door:${eventName}`, event);
         });
 
     });

@@ -4,8 +4,6 @@ const expressWinston = require('express-winston');
 const path = require('path');
 const glob = require('glob');
 const http = require('http');
-const httpBasicAuth = require('./app/middleware/http-basic-auth');
-const tryStaticGzipped = require('./app/middleware/try-static-gzipped');
 
 const logger = require('./app/lib/logger').prefixed('app');
 const config = require('./config/config');
@@ -24,17 +22,6 @@ app.use(expressWinston.logger({
 
 app.use(bodyParser.json());
 
-if (config.auth.type === 'http-basic') {
-    logger.info(`Enabling HTTP Basic Auth for ${config.auth.user}`);
-    app.use(httpBasicAuth(config.auth.user, config.auth.password));
-}
-
-
-const publicPath = path.join(config.root, 'public');
-
-app.get('*.bundle.js', tryStaticGzipped(path.join(publicPath)));
-app.use(express.static(publicPath));
-
 const routes = glob.sync(path.join(config.root, 'app', 'routes', '*.js'))
     .map(c => require(c));
 app.use('/api', routes);
@@ -52,12 +39,6 @@ app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
         message: err.message,
         error: err,
     });
-});
-
-// angular routes
-const indexFile = path.join(config.root, 'public', 'index.html');
-app.use((req, res) => {
-    res.status(200).sendFile(indexFile);
 });
 
 const server = http.createServer(app);

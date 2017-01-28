@@ -7,12 +7,12 @@ module.exports = [
             toggle: 3,
         },
     },
-    // {
-    //     name: 'Right',
-    //     id: 2,
-    //     gpio: {
-    //         sensor: 10,
-    //         toggle: 11,
-    //     },
-    // },
+    {
+        name: 'Right',
+        id: 2,
+        gpio: {
+            sensor: 38,
+            toggle: 5,
+        },
+    },
 ];

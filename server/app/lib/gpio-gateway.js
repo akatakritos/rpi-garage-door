@@ -57,9 +57,11 @@ module.exports.init = function(configuredDoors, rpioImpl) {
     doors = configuredDoors;
     events = new EventEmitter();
 
-    rpio.open(doors[0].gpio.toggle, OUTPUT, HIGH);
-    rpio.pud(doors[0].gpio.sensor, PULL_DOWN);
-    rpio.open(doors[0].gpio.sensor, INPUT);
+    doors.forEach(door => {
+        rpio.open(door.gpio.toggle, OUTPUT, HIGH);
+        rpio.pud(door.gpio.sensor, PULL_DOWN);
+        rpio.open(door.gpio.sensor, INPUT);
+    });
 };
 
 module.exports.toggle = function(door) {

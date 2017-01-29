@@ -52,6 +52,8 @@ server.listen(config.port, () => {
 });
 
 const checker = require('./app/lib/open-door-checker');
+const vacationMode = require('./app/lib/vacation-mode');
 if (config.sms.enabled) {
     checker.setup();
+    vacationMode.enable();
 }

@@ -1,6 +1,6 @@
 module.exports = [
     {
-        name: 'Left',
+        name: 'Right',
         id: 1,
         gpio: {
             sensor: 40,
@@ -8,7 +8,7 @@ module.exports = [
         },
     },
     {
-        name: 'Right',
+        name: 'Left',
         id: 2,
         gpio: {
             sensor: 38,

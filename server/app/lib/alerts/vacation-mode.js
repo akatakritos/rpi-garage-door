@@ -13,6 +13,11 @@ class VacationMode {
 
 
     enable() {
+        if (this.handles.opened || this.handles.closed) {
+            logger.warn('already enabled');
+            return Promise.resolve();
+        }
+
         this.client = SmsApi.create();
 
         ['opened', 'closed'].forEach(eventName => {

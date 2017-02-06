@@ -28,10 +28,6 @@ router.get('/status', (req, res, next) => {
                     local : moment.tz(config.timezone).format(FORMAT),
                 },
                 environment: config.env,
-                alerts: [
-                    { name: 'Left Door Open at Night', enabled: config.sms.enabled },
-                ],
-
             };
 
             res.json(result);

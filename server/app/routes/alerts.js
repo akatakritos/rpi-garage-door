@@ -8,7 +8,7 @@ router.get('/alerts', (req, res, next) => {
             return res.json(alerts);
         })
         .catch(err => {
-            logger.error('Caught error');
+            logger.error('problem loading alerts', err);
             next(err);
         });
 });
@@ -30,7 +30,7 @@ function changeState(changeType) {
                 Alerts[changeType](id)
                     .then(() => res.status(200).send())
                     .catch(err => {
-                        logger.error(err);
+                        logger.error(`problem ${changeType}ing alert ${id}`, err);
                         return next(err);
                     });
             });

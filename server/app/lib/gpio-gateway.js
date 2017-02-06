@@ -94,6 +94,7 @@ module.exports.isOpen = function(door) {
 
 
 module.exports.subscribe = function(name, cb) {
+
     if (listenerCount() === 0) {
         logger.info('starting polling');
         poll();

@@ -24,7 +24,11 @@ class VacationMode {
 
             const handle = gpio.subscribe(eventName, door => {
                 logger.info(`alerting "${door.name}" has ${eventName}`);
-                this.client.alert(`Warning! Door "${door.name}" has ${eventName}!`);
+                const message = eventName === 'opened' ?
+                    `Warning! Door "${door.name}" has opened!` :
+                    `It's OK. Door "${door.name}" is closed now.`;
+
+                this.client.alert(message);
             });
 
             this.handles[eventName] = handle;

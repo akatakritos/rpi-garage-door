@@ -22,7 +22,7 @@ if (config.env === 'production') {
         filename: path.join(logFolder, 'log'),
         datePattern: 'yyyy-MM-dd.',
         prepend: true,
-        level: 'info',
+        level: 'verbose',
         timestamp: true,
         colorize: false,
         json: false,

@@ -1,14 +1,18 @@
-const gpio = require('./gpio-gateway');
-const logger = require('./logger').prefixed('vacation-mode');
-const SmsApi = require('./sms');
+const gpio = require('../gpio-gateway');
+const logger = require('../logger').prefixed('vacation-mode');
+const SmsApi = require('../sms');
 
-module.exports = {
+class VacationMode {
 
-    handles: {},
-    client: null,
+    constructor() {
+        this.name = 'Vacation Mode';
+
+        this.handles = {};
+        this.client = null;
+    }
+
 
     enable() {
-
         this.client = SmsApi.create();
 
         ['opened', 'closed'].forEach(eventName => {
@@ -21,7 +25,10 @@ module.exports = {
             this.handles[eventName] = handle;
 
         });
-    },
+
+        logger.info('enabled');
+        return Promise.resolve();
+    }
 
     disable() {
 
@@ -29,6 +36,10 @@ module.exports = {
             gpio.unsubscribe(k, this.handles[k]);
             delete this.handles[k];
         });
-    },
 
-};
+        logger.info('disabled');
+        return Promise.resolve();
+    }
+}
+
+module.exports = VacationMode;

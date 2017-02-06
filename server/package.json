@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --recursive test --reporter spec --require ./test/init.js",
     "start": "node app.js",
-    "watch": "nodemon app.js",
+    "watch": "nodemon --ignore data app.js",
     "lint": "eslint app/** config/** test/**"
   },
   "author": "Matt Burke",

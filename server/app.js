@@ -7,12 +7,14 @@ const http = require('http');
 
 const logger = require('./app/lib/logger').prefixed('app');
 const config = require('./config/config');
+const alerts = require('./app/lib/alerts');
 
 const app = express();
 
 const gpio = require('./app/lib/gpio-gateway');
 const doors = require('./config/doors');
 const hw = config.pi ? require('rpio') : require('./app/lib/fake-rpio');
+
 
 gpio.init(doors, hw);
 
@@ -51,9 +53,7 @@ server.listen(config.port, () => {
     logger.info(`Running in the ${config.env} environment`);
 });
 
-const checker = require('./app/lib/open-door-checker');
-const vacationMode = require('./app/lib/vacation-mode');
-if (config.sms.enabled) {
-    checker.setup();
-    vacationMode.enable();
-}
+alerts.init()
+    .then(() => {
+        logger.info('initialized alerts');
+    });
